@@ -1,0 +1,216 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "This is an OpenAPI for Reservation table - a project for Service Oriented Programming Lecture",
+    "version": "1.0.0",
+    "title": "OpenAPI Reservation table"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:1234"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "get": {
+        "description": "Logging in a user",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response for login attempt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reservation": {
+      "get": {
+        "description": "Getting the list of reservations",
+        "responses": {
+          "200": {
+            "description": "Giving back the reserved seats",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "reservedBy": {
+                        "type": "string"
+                      },
+                      "seatColumn": {
+                        "type": "integer"
+                      },
+                      "seatRow": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Adding a reservation into the database",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reservaor": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "rownum": {
+                    "type": "integer"
+                  },
+                  "columnnum": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response depending on circumstances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Updating existing reservations",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "seatrow": {
+                    "type": "integer"
+                  },
+                  "seatcolumn": {
+                    "type": "integer"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response depending on circumstances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deleting a reservation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "id of the selected seat",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "reservedby",
+            "in": "query",
+            "description": "reservator's name of the selected seat",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "description": "username of admin",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "password of admin",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response depending on circumstances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -265,6 +265,7 @@ namespace Reservation_SOP
 
         private void btn_reserve_Click(object sender, RoutedEventArgs e)
         {
+            ListReservations();
             if (pending.Count == 0)
             {
                 MessageBox.Show("Please select seat(s) to reserve");
@@ -301,6 +302,7 @@ namespace Reservation_SOP
             {
                 MessageBox.Show(message);
                 pending.Clear();
+                ListReservations();
                 DrawTable(can_seats, null);
                 return;
             }

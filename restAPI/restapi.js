@@ -4,6 +4,29 @@ var app = express();
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var url = require('url');
+const swaggerUI = require("swagger-ui-express");
+const swaggerDocument = require('./openapi.json');
+const swaggerJsDoc = require("swagger-jsdoc");
+
+const options = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "OpenAPI Reservation table",
+            version: "1.0.0",
+            description: "This is an OpenAPI for Reservation table - a project for Service Oriented Programming Lecture",
+        },
+        servers: [
+            {
+                url: `http://127.0.0.1:1234`,
+            },
+        ],
+    },
+    apis: ["./*.js"],
+};
+const specs = swaggerJsDoc(options);
+app.get("/openapi.json", (req, res) => res.json(swaggerDocument))
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 var connection = mysql.createConnection({
     host     : 'localhost',
@@ -22,7 +45,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-var server = app.listen(3000,  "127.0.0.1", function () {
+var server = app.listen(1234,  "127.0.0.1", function () {
     var host = server.address().address
     var port = server.address().port
     console.log("Server started at URI: http://%s:%s", host, port)
@@ -110,7 +133,7 @@ var params = url.parse(req.url,true).query;
         res.end("No username or password added")
     }
     else{
-        var sql = "select count(name) as count from users where name='"+params.username+"' and password='"+params.password+"'";
+        var sql = "select count(name) as count from users where name='"+params.username+"' and password='"+params.password+"' and Admin=1";
         var query = connection.query(sql, function (err, results) {
             if (err) throw err;
             if (results[0].count > 0){
@@ -129,11 +152,10 @@ var params = url.parse(req.url,true).query;
                 })
             }
             else{
-                res.end("You must be logged in to use this function!");
+                res.end("You must be logged in AND be an admin to use this function!");
             }
         })
     }
-
 })
 
 app.put('/reservation',function (req,res){
@@ -143,7 +165,7 @@ app.put('/reservation',function (req,res){
         res.end("No username or password added")
     }
     else{
-        var sql = "select count(name) as count from users where name='"+quer.username+"' and password='"+quer.password+"'";
+        var sql = "select count(name) as count from users where name='"+quer.username+"' and password='"+quer.password+"' and Admin=1";
         var query = connection.query(sql, function (err, results) {
             if (err) throw err;
             if (results[0].count > 0){
@@ -159,11 +181,11 @@ app.put('/reservation',function (req,res){
                 if (quer.seatcolumn > 20){
                     return res.end("The given column is bigger than 20!")
                 }
-                if (quer.seatrow < 0){
-                    return res.end("The given row is smaller than 0!")
+                if (quer.seatrow <= 0){
+                    return res.end("The given row is smaller than 1!")
                 }
-                if (quer.seatcolumn < 0){
-                    return res.end("The given column is smaller than 0!")
+                if (quer.seatcolumn <= 0){
+                    return res.end("The given column is smaller than 1!")
                 }
 
                 var sql = "select count(reservedBy) as count from reservation where seatRow="+(quer.seatrow-1)+" and seatColumn="+(quer.seatcolumn-1)+"";
@@ -171,7 +193,6 @@ app.put('/reservation',function (req,res){
                     if (err) throw err;
                     if(results[0].count == 0){
                         var sql = "update reservation set seatRow ="+(quer.seatrow-1)+", seatColumn="+(quer.seatcolumn-1)+" where id="+quer.id+"";
-                        console.log(sql);
                         var query = connection.query(sql, function (err, results) {
                             if (err) throw err;
                             else{
@@ -185,9 +206,8 @@ app.put('/reservation',function (req,res){
                 })
             }
             else{
-                res.end("You must be logged in to use this function!");
+                res.end("You must be logged in AND be an admin to use this function!");
             }
         })
     }
-
 })
