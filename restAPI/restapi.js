@@ -38,7 +38,7 @@ app.get('/login', function (req, res) {
     else{
         var api_req = http.request({
                 hostname: '127.0.0.1',
-                path: '/restAPI/users_index.php?username='+quer.username+'&password='+quer.password,
+                path: '/restAPI/userLogin.php?username='+quer.username+'&password='+quer.password,
                 method: 'GET'
             },
             api_res => {
@@ -190,10 +190,4 @@ app.put('/reservation',function (req,res){
         })
     }
 
-})
-
-var sql = "select * from users;";
-var query = connection.query(sql, function (err, results) {
-    if (err) throw err;
-// results a query eredménye
 })

@@ -1,6 +1,5 @@
 <?php
 include("db.php");
-include("common.php");
 $request = $_SERVER['REQUEST_METHOD'];
 
 switch ($request) {
