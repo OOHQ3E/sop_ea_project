@@ -5,24 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Reservation_SOP"
         mc:Ignorable="d"
-       Title="Reservations" Height="558.4" Width="848.4" Background="#FFFFDDAF" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+       Title="Reservations" Height="558.4" Width="848.4" Background="#FFFFDDAF" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Grid>
         <Canvas Background="Tan" x:Name="can_seats" Width="496" Height="496" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,10,0,9.6">
         </Canvas>
-        <Label FontSize="14" x:Name="lbl_reserveFor" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  Content="Reservation for:" Canvas.Left="507" Canvas.Top="40" Margin="523,17,171.6,473.8"/>
-        <TextBox IsReadOnly="True" IsEnabled="False" FontSize="16" TabIndex="1" x:Name="tb_ReservationName" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Height="38" Margin="675,17,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="151" RenderTransformOrigin="0.772,1.074"/>
+        <Label FontSize="12" x:Name="lbl_reserveFor" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  Content="Reservation belongs to:" Canvas.Left="507" Canvas.Top="40" Margin="523,317,171.6,173.8"/>
+        <TextBox IsReadOnly="True" IsEnabled="False" FontSize="16" TabIndex="1" x:Name="tb_ReservationName" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Height="38" Margin="675,317,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="151" RenderTransformOrigin="0.772,1.074"/>
         <Button FontSize="16" TabIndex="2" x:Name="btn_reserve" Content="Reserve seat(s)" HorizontalAlignment="Left" Margin="675,60,0,0" VerticalAlignment="Top" Width="151" Height="38" Click="btn_reserve_Click"/>
         <Button FontSize="16" TabIndex="4" x:Name="btn_Update" Content="Update table" HorizontalAlignment="Left" Margin="675,102,0,0" VerticalAlignment="Top" Width="151" Height="38" Click="btn_Update_Click" RenderTransformOrigin="0.625,-0.372"/>
         <Button FontSize="16" TabIndex="5" x:Name="btn_ResetInputs" Content="Reset Inputs" HorizontalAlignment="Left" Margin="675,145,0,0" VerticalAlignment="Top" Width="151" Height="38" RenderTransformOrigin="0.625,-0.372" Click="btn_ResetInputs_Click"/>
-        <Label FontSize="14" Content="Row:" x:Name="lbl_SeatRow" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="528,276,166.6,214.8"/>
-        <Label FontSize="14" Content="Column:" x:Name="lbl_SeatColumn" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="528,314,166.6,176.8"/>
-        <TextBox FontSize="16" TabIndex="6"  x:Name="tb_SeatRow" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Height="38" Margin="675,276,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="151" RenderTransformOrigin="0.772,1.074"/>
-        <TextBox FontSize="16" TabIndex="7" x:Name="tb_SeatColumn" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Height="38" Margin="675,319,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="151" RenderTransformOrigin="0.772,1.074"/>
+        <Label FontSize="14" Content="Row:" x:Name="lbl_SeatRow" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="523,231,171.6,259.8" RenderTransformOrigin="0.516,0.526"/>
+        <Label FontSize="14" Content="Column:" x:Name="lbl_SeatColumn" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="523,274,171.6,216.8"/>
+        <TextBox FontSize="16" TabIndex="6"  x:Name="tb_SeatRow" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Height="38" Margin="675,231,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="151" RenderTransformOrigin="0.772,1.074"/>
+        <TextBox FontSize="16" TabIndex="7" x:Name="tb_SeatColumn" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Height="38" Margin="675,274,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="151" RenderTransformOrigin="0.772,1.074"/>
         <Button FontSize="16" TabIndex="8" x:Name="btn_Search" Content="Search/Highlight" HorizontalAlignment="Left" Margin="523,60,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btn_Search_Click"/>
-        <Button FontSize="16" TabIndex="9" x:Name="btn_EditName" Content="Edit name of seats" HorizontalAlignment="Left" Margin="523,103,0,0" VerticalAlignment="Top" Width="147" Height="38" RenderTransformOrigin="0.584,2.95" Click="btn_EditName_Click"/>
-        <Button FontSize="16" TabIndex="10" x:Name="btn_EditSelected" Content="Edit Selected Seat" HorizontalAlignment="Left" Margin="523,145,0,0" VerticalAlignment="Top" Width="147" Height="38" RenderTransformOrigin="0.584,2.95" Click="btn_EditSelected_Click"/>
-        <Button FontSize="16" TabIndex="11" x:Name="btn_DeleteSelected" Content="Delete Selected" HorizontalAlignment="Left" Margin="523,188,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btn_DeleteSelected_Click"/>
-        <Button FontSize="16" TabIndex="12" x:Name="btn_DeleteByName" Content="Delete by Name" HorizontalAlignment="Left" Margin="523,231,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btn_DeleteByName_Click" RenderTransformOrigin="0.403,2.995"/>
+        <Button FontSize="16" TabIndex="10" x:Name="btn_EditSelected" Content="Edit Selected Seat" HorizontalAlignment="Left" Margin="523,102,0,0" VerticalAlignment="Top" Width="147" Height="38" RenderTransformOrigin="0.584,2.95" Click="btn_EditSelected_Click"/>
+        <Button FontSize="16" TabIndex="11" x:Name="btn_DeleteSelected" Content="Delete Selected" HorizontalAlignment="Left" Margin="523,145,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btn_DeleteSelected_Click"/>
+        <Button FontSize="16" TabIndex="12" x:Name="btn_DeleteByName" Content="Delete by Name" HorizontalAlignment="Left" Margin="523,188,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="btn_DeleteByName_Click" RenderTransformOrigin="0.403,2.995"/>
         <Button FontSize="16" TabIndex="13" x:Name="btn_LogOut" Content="Logout" HorizontalAlignment="Left" Margin="523,362,0,0" VerticalAlignment="Top" Width="303" Height="38" Click="btn_LogOut_Click" RenderTransformOrigin="0.403,2.995"/>
+        <Rectangle x:Name="rec_AvailableSeat" Fill="Green" HorizontalAlignment="Left" Height="21" Stroke="Black" Margin="523,414,0,0" VerticalAlignment="Top" Width="21"/>
+        <Rectangle x:Name="rec_PendingSeat" Fill="LightBlue" HorizontalAlignment="Left" Height="21" Stroke="Black" Margin="523,492,0,0" VerticalAlignment="Top" Width="21" RenderTransformOrigin="0.121,1.905"/>
+        <Rectangle x:Name="rec_TakenSeat" Fill="Red" HorizontalAlignment="Left" Height="21" Stroke="Black" Margin="523,453,0,0" VerticalAlignment="Top" Width="21" RenderTransformOrigin="1.937,0.533"/>
+        <Rectangle x:Name="rec_HighlightedSeat" Fill="Magenta" HorizontalAlignment="Left" Height="21" Stroke="Black" Margin="694,453,0,0" VerticalAlignment="Top" Width="21" RenderTransformOrigin="1.937,0.533"/>
+        <Label x:Name="lbl_Available" Content="- Available seat" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="549,409,0,0" Height="26" Width="108" FontSize="11"/>
+        <Label x:Name="lbl_Reserved" Content="- Reserved seat" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="549,448,0,0" Height="26" Width="108" FontSize="11"/>
+        <Label x:Name="lbl_Pending" Content="- Pending seat" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="549,487,0,0" Height="26" Width="108" FontSize="11"/>
+        <Rectangle x:Name="rec_OwnSeat" Fill="Pink" HorizontalAlignment="Left" Height="21" Stroke="Black" Margin="694,414,0,0" VerticalAlignment="Top" Width="21" RenderTransformOrigin="1.937,0.533"/>
+        <Label x:Name="lbl_OwnSeat" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="720,409,0,0" Height="39" Width="108" FontSize="11">
+            <TextBlock TextWrapping="Wrap" Width="98">
+                - Seat already 
+                reserved by You
+            </TextBlock>
+        </Label>
+        <Label x:Name="lbl_Highlighted" Content="- Highlighted seat" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="720,448,0,0" Height="26" Width="108" FontSize="11"/>
+        <Label FontSize="12" x:Name="lbl_loggedinusername" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Margin="523,10,15.6,473.8">
+            <TextBlock x:Name="txtblk_LoggedinUsername" TextWrapping="Wrap" Height="35" Width="293">
+                Currently logged in as: 
+            </TextBlock>
+        </Label>
     </Grid>
 </Window>

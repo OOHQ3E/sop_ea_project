@@ -34,15 +34,8 @@ namespace Reservation_SOP
 
         private void btn_Login_Click(object sender, RoutedEventArgs e)
         {
-
-            if (tb_LoginUsername.Text == "" || tb_LoginPassword.Password == "")
-            {
-                MessageBox.Show("Username and password is required!");
-                return;
-            }
             var request = new RestRequest(Method.GET);
             request.RequestFormat = RestSharp.DataFormat.Json;
-
             request.AddObject(new
             {
                 username = tb_LoginUsername.Text,
@@ -64,14 +57,14 @@ namespace Reservation_SOP
             }
             catch (InvalidCastException)
             {
-                MessageBox.Show("Incorrect login credentials!");
+                MessageBox.Show(response.Content);
                 tb_LoginPassword.Clear();
                 tb_LoginUsername.Clear();
                 return;
             }
             catch (System.Runtime.Serialization.SerializationException)
             {
-                MessageBox.Show("Incorrect login credentials!");
+                MessageBox.Show(response.Content);
                 tb_LoginPassword.Clear();
                 tb_LoginUsername.Clear();
                 return;

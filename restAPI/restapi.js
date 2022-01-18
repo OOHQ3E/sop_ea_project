@@ -1,9 +1,9 @@
 var http = require("http");
-var express = require('express'); // szerver, amit használsz, külön metódusok a get, post, put és delete-hez
-var app = express(); // szerver (példány)
+var express = require('express');
+var app = express();
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
-var url = require('url'); // pl ha valami ilyen: /valami/:id -> id parseol-ja
+var url = require('url');
 
 var connection = mysql.createConnection({
     host     : 'localhost',
@@ -30,27 +30,41 @@ var server = app.listen(3000,  "127.0.0.1", function () {
 
 app.get('/login', function (req, res) {
     var quer = url.parse(req.url, true).query;
-    var api_req = http.request({
-            hostname: '127.0.0.1',
-            path: '/restAPI/users_index.php?username='+quer.username+'&password='+quer.password,
-            method: 'GET'
-        },
-        api_res => {
-            api_res.on('data', d => {
-                var data = JSON.parse(d);
-                res.json(data);
+    if (!quer.username || !quer.password){
+        console.log("Username and password is required!")
+        res.end("Username and password is required!")
+        return;
+    }
+    else{
+        var api_req = http.request({
+                hostname: '127.0.0.1',
+                path: '/restAPI/users_index.php?username='+quer.username+'&password='+quer.password,
+                method: 'GET'
+            },
+            api_res => {
+                api_res.on('data', d => {
+                    var data = JSON.parse(d);
+                    if (data == false){
+                        console.log("There is no such profile with the given data! Please try again!")
+                        res.end("There is no such profile with the given data! Please try again!")
+                    }
+                    else{
+                        res.json(data);
+                    }
+                })
             })
-        })
 
-    api_req.on('error', error => {
-        console.log(error); throw error;
-    })
-    api_req.end()
+        api_req.on('error', error => {
+            console.log(error); throw error;
+        })
+        api_req.end()
+    }
+
 });
 app.get('/reservation', function (req, res) {
     var api_req = http.request({
             hostname: '127.0.0.1',
-            path: '/restAPI/reservation_index.php',
+            path: '/restAPI/reservation.php',
             method: 'GET'
         },
         api_res => {
@@ -64,6 +78,119 @@ app.get('/reservation', function (req, res) {
     })
     api_req.end()
 });
+app.post('/reservation',function (req,res){
+    var quer = req.body;
+    if (!quer.reservator  || !quer.password){
+        console.log("No username or password added");
+        res.end("No username or password added")
+    }
+    else{
+        var sql = "select count(name) as count from users where name='"+quer.reservator+"' and password='"+quer.password+"'";
+        var query = connection.query(sql, function (err, results) {
+            if (err) throw err;
+            if (results[0].count > 0){
+                var sql = "insert into reservation(reservedBy,seatRow,seatColumn) values('"+quer.reservator+"',"+quer.rownum+","+quer.columnnum+")";
+                var query = connection.query(sql, function (err, results) {
+                if (err) throw err;
+                else{
+                    res.end("Successfully added!");
+                }
+                })
+            }
+            else{
+                res.end("You must be logged in to use this function!");
+            }
+        })
+    }
+})
+app.delete('/reservation',function (req,res){
+var params = url.parse(req.url,true).query;
+    if (!params.username  || !params.password){
+        console.log("No username or password added");
+        res.end("No username or password added")
+    }
+    else{
+        var sql = "select count(name) as count from users where name='"+params.username+"' and password='"+params.password+"'";
+        var query = connection.query(sql, function (err, results) {
+            if (err) throw err;
+            if (results[0].count > 0){
+                var sql;
+                if(!params.reservedby){
+                    sql = "delete from reservation where id="+params.id+"";
+                }
+                else{
+                    sql = "delete from reservation where reservedBy='"+params.reservedby+"'";
+                }
+                var query = connection.query(sql, function (err, results) {
+                    if (err) throw err;
+                    else{
+                        res.end("Successful deletion!");
+                    }
+                })
+            }
+            else{
+                res.end("You must be logged in to use this function!");
+            }
+        })
+    }
+
+})
+
+app.put('/reservation',function (req,res){
+    var quer = req.body;
+    if (!quer.username  || !quer.password){
+        console.log("No username or password added");
+        res.end("No username or password added")
+    }
+    else{
+        var sql = "select count(name) as count from users where name='"+quer.username+"' and password='"+quer.password+"'";
+        var query = connection.query(sql, function (err, results) {
+            if (err) throw err;
+            if (results[0].count > 0){
+                if (isNaN(quer.seatrow)){
+                    return res.end("Invalid input! (must be number)")
+                }
+                if ( isNaN(quer.seatcolumn)){
+                    return res.end("Invalid input! (must be number)")
+                }
+                if (quer.seatrow > 20){
+                    return res.end("The given row is bigger than 20!")
+                }
+                if (quer.seatcolumn > 20){
+                    return res.end("The given column is bigger than 20!")
+                }
+                if (quer.seatrow < 0){
+                    return res.end("The given row is smaller than 0!")
+                }
+                if (quer.seatcolumn < 0){
+                    return res.end("The given column is smaller than 0!")
+                }
+
+                var sql = "select count(reservedBy) as count from reservation where seatRow="+(quer.seatrow-1)+" and seatColumn="+(quer.seatcolumn-1)+"";
+                var query = connection.query(sql, function (err, results) {
+                    if (err) throw err;
+                    if(results[0].count == 0){
+                        var sql = "update reservation set seatRow ="+(quer.seatrow-1)+", seatColumn="+(quer.seatcolumn-1)+" where id="+quer.id+"";
+                        console.log(sql);
+                        var query = connection.query(sql, function (err, results) {
+                            if (err) throw err;
+                            else{
+                                res.end("Successful edit!");
+                            }
+                        })
+                    }
+                    else{
+                    res.end("This seat is already taken, cannot modify to it!")
+                    }
+                })
+            }
+            else{
+                res.end("You must be logged in to use this function!");
+            }
+        })
+    }
+
+})
 
 var sql = "select * from users;";
 var query = connection.query(sql, function (err, results) {
