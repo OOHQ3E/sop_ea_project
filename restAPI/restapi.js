@@ -54,7 +54,7 @@ var server = app.listen(1234,  "127.0.0.1", function () {
 app.get('/login', function (req, res) {
     var quer = url.parse(req.url, true).query;
     if (!quer.username || !quer.password){
-        console.log("Username and password is required!")
+        //console.log("Username and password is required!")
         res.end("Username and password is required!")
         return;
     }
@@ -68,7 +68,7 @@ app.get('/login', function (req, res) {
                 api_res.on('data', d => {
                     var data = JSON.parse(d);
                     if (data == false){
-                        console.log("There is no such profile with the given data! Please try again!")
+                        //console.log("There is no such profile with the given data! Please try again!")
                         res.end("There is no such profile with the given data! Please try again!")
                     }
                     else{
@@ -87,7 +87,7 @@ app.get('/login', function (req, res) {
 app.get('/reservation', function (req, res) {
     var quer = url.parse(req.url,true).query;
     if (!quer.username  || !quer.password){
-        console.log("No username or password added");
+        //console.log("No username or password added");
         res.end("No username or password added")
     }
     else{
@@ -121,7 +121,7 @@ app.get('/reservation', function (req, res) {
 app.post('/reservation',function (req,res){
     var quer = req.body;
     if (!quer.reservator  || !quer.password){
-        console.log("No username or password added");
+        //console.log("No username or password added");
         res.end("No username or password added")
     }
     else{
@@ -155,7 +155,7 @@ app.post('/reservation',function (req,res){
 app.delete('/reservation',function (req,res){
 var params = url.parse(req.url,true).query;
     if (!params.username  || !params.password){
-        console.log("No username or password added");
+        //console.log("No username or password added");
         res.end("No username or password added")
     }
     else{
@@ -187,7 +187,7 @@ var params = url.parse(req.url,true).query;
 app.put('/reservation',function (req,res){
     var quer = req.body;
     if (!quer.username  || !quer.password){
-        console.log("No username or password added");
+        //console.log("No username or password added");
         res.end("No username or password added")
     }
     else{

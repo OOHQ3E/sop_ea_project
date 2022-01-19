@@ -259,7 +259,7 @@ namespace Reservation_SOP
 
         private void btn_Search_Click(object sender, RoutedEventArgs e)
         {
-
+            ListReservations();
             if (tb_ReservationName.Text == "")
             {
                 MessageBox.Show("Please input a name");
@@ -271,6 +271,7 @@ namespace Reservation_SOP
                 return;
             }
             pending.Clear();
+            ButtonCheck();
             ListReservations();
             DrawTable(can_seats, sender);
         }
