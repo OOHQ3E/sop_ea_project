@@ -12,7 +12,7 @@ const options = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "OpenAPI Reservation table",
+            title: "OpenAPI for Reservation table",
             version: "1.0.0",
             description: "This is an OpenAPI for Reservation table - a project for Service Oriented Programming Lecture",
         },
@@ -85,21 +85,38 @@ app.get('/login', function (req, res) {
 
 });
 app.get('/reservation', function (req, res) {
-    var api_req = http.request({
-            hostname: '127.0.0.1',
-            path: '/restAPI/reservation.php',
-            method: 'GET'
-        },
-        api_res => {
-            api_res.on('data', d => {
-                var data = JSON.parse(d);
-                res.json(data);
-            })
+    var quer = url.parse(req.url,true).query;
+    if (!quer.username  || !quer.password){
+        console.log("No username or password added");
+        res.end("No username or password added")
+    }
+    else{
+        var sql = "select count(name) as count from users where name='"+quer.username+"' and password='"+quer.password+"'";
+        var query = connection.query(sql, function (err, results) {
+            if (err) throw err;
+            if (results[0].count > 0){
+                var api_req = http.request({
+                        hostname: '127.0.0.1',
+                        path: '/restAPI/reservation.php',
+                        method: 'GET'
+                    },
+                    api_res => {
+                        api_res.on('data', d => {
+                            var data = JSON.parse(d);
+                            res.json(data);
+                        })
+                    })
+                api_req.on('error', error => {
+                    console.log(error); throw error;
+                })
+                api_req.end()
+            }
+            else{
+                res.end("You must be logged in to use this function!");
+            }
         })
-    api_req.on('error', error => {
-        console.log(error); throw error;
-    })
-    api_req.end()
+    }
+
 });
 app.post('/reservation',function (req,res){
     var quer = req.body;
@@ -112,12 +129,21 @@ app.post('/reservation',function (req,res){
         var query = connection.query(sql, function (err, results) {
             if (err) throw err;
             if (results[0].count > 0){
-                var sql = "insert into reservation(reservedBy,seatRow,seatColumn) values('"+quer.reservator+"',"+quer.rownum+","+quer.columnnum+")";
+                var sql = "select count(reservedBy) as count from reservation where seatRow="+(quer.rownum)+" and seatColumn="+(quer.columnnum)+"";
                 var query = connection.query(sql, function (err, results) {
-                if (err) throw err;
-                else{
-                    res.end("Successfully added!");
-                }
+                    if (err) throw err;
+                    if(results[0].count == 0){
+                        var sql = "insert into reservation(reservedBy,seatRow,seatColumn) values('"+quer.reservator+"',"+quer.rownum+","+quer.columnnum+")";
+                        var query = connection.query(sql, function (err, results) {
+                            if (err) throw err;
+                            else{
+                                res.end("Reservation for "+quer.reservator+" was successful!");
+                            }
+                        })
+                    }
+                    else{
+                        res.end("This seat (col: "+(quer.columnnum+1)+",row: "+(quer.rownum+1)+") is already taken, please choose a different one, if possible! - updating table")
+                    }
                 })
             }
             else{

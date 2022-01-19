@@ -53,11 +53,17 @@ namespace Reservation_SOP
             var request = new RestRequest(Method.GET);
             request.RequestFormat = RestSharp.DataFormat.Json;
 
+            request.AddObject(new
+            {
+                username = MainWindow.LoggedInUser.Name,
+                password = MainWindow.LoggedInUser.Password
+            });
+
             var response = client.Execute(request);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                MessageBox.Show(response.StatusDescription);
+                MessageBox.Show(response.Content);
                 return;
             }
 
@@ -117,6 +123,10 @@ namespace Reservation_SOP
                                 if (reservations.Find(x => x.ReservedBy == tb_ReservationName.Text && x.SeatColumn == i && x.SeatRow == j) != null)
                                 {
                                     rectangle.Fill = Brushes.Magenta;
+                                }
+                                else if (reservations.Find(x => x.ReservedBy == MainWindow.LoggedInUser.Name && x.SeatColumn == i && x.SeatRow == j) != null)
+                                {
+                                    rectangle.Fill = Brushes.Pink;
                                 }
                                 else
                                 {
@@ -217,6 +227,8 @@ namespace Reservation_SOP
                 btn_Search.Visibility = Visibility.Visible;
                 btn_Search.IsEnabled = true;
 
+                tb_ReservationName.IsEnabled = true;
+                tb_ReservationName.IsReadOnly = false;
                 tb_SeatColumn.IsEnabled = true;
                 tb_SeatRow.IsEnabled = true;
                 rec_HighlightedSeat.Visibility = Visibility.Visible;
@@ -290,6 +302,7 @@ namespace Reservation_SOP
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     successful = true;
+                    message = response.Content;
                 }
                 else
                 {
@@ -308,7 +321,7 @@ namespace Reservation_SOP
             }
             else
             {
-                MessageBox.Show($"Reservation for \"{MainWindow.LoggedInUser.Name}\" was successful!");
+                MessageBox.Show(message);
                 pending.Clear();
                 ListReservations();
                 ResetInputs();
