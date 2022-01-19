@@ -1,6 +1,4 @@
-# Reservation table project RestAPI with Node.js / PHP and OpenAPI
-Project for Service Oriented Programming lecture
-## HU: Szolgáltatás Orientált Programozás előadás beadandó (NodeJS + PHP RestAPI + WPF kliens) - EKKE IK PTI Bsc. - NK-OOHQ3E Bagoly Gábor - 2021/22 őszi félév
+## HU: Szolgáltatás Orientált Programozás előadás beadandó (NodeJS + PHP RestAPI + WPF kliens + OpenAPI) - EKKE IK PTI Bsc. - NK-OOHQ3E Bagoly Gábor - 2021/22 őszi félév
 ### Kis setup segítség:
 
   - [NodeJS-t telepíteni a hivatalos oldalról](https://nodejs.org/en/download/)
@@ -14,7 +12,7 @@ Project for Service Oriented Programming lecture
       - XAMPP-on az Apache-ot és a MySQL-t el kell indítani
       - restAPI mappát megnyitni powershell-ben és beírni ezt az utasítást ```node ./restapi.js```
 
-## ENG: Service Oriented Preogramming lecture project (NodeJS + PHP RestAPI + WPF client) - EKCU IF CS Bsc. - NK-OOHQ3E Gábor Bagoly - 2021/22 autumn semester
+## ENG: Service Oriented Preogramming lecture project (NodeJS + PHP RestAPI + WPF client + OpenAPI) - EKCU IF CS Bsc. - NK-OOHQ3E Gábor Bagoly - 2021/22 autumn semester
 ### Little setup help:
 
   - [Installing NodeJS from the offical site](https://nodejs.org/en/download/)
